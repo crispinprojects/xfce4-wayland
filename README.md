@@ -1,10 +1,14 @@
-# Setting Up & Testing Xfce4 Wayland Using Debian 13 Trixie
+# Xfce4 Wayland 
+
+## Setting Up & Testing Using Debian 13 Trixie
 
 Xfce is a lightweight desktop environment and version 4.20 is in the Debian 13 Trixie package repositories. This github page shows how it can be setup using the labwc Wayland compositor.
 
 A screenshot of Xfce 4.20 Wayland is shown below. 
 
 ![](xfce4-wayland.png)
+
+Notice that the Window Manager (WM) is labwc the Wayland compositor and Xfce 4.20 is being used.
 
 ## Install Debian 13 Trixie
 
@@ -124,7 +128,7 @@ Before rebooting create an empty file using the Mousepad text editor and save it
 
 Now reboot and check your keyboard.
 
-## Sway
+## Sway Utilities
 
 Sway is a tiling window manager and Wayland compositor. It is designed to be a drop-in replacement for the i3 X11 window manager. 
 
