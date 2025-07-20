@@ -1,4 +1,4 @@
-# Xfce4 Wayland 
+# Xfce4 Wayland (labwc)
 
 ## Set Up & Testing Using Debian 13 Trixie
 
@@ -53,16 +53,17 @@ sudo apt install xfce4-goodies
 
 The [Xfce Wayland roadmap](https://wiki.xfce.org/releng/wayland_roadmap)  reveals that Xfce 4.20 provides preliminary Wayland support to core components. Various websites discuss using the following Sway components for added functionality.
 
+* swaybg: Wayland wallpaper utility
 * swayidle: Wayland idle management daemon 
 * swaylock: Wayland screen locking utility 
-* swaybg: Wayland wallpaper utility
+
 
 These are installed using the commands below. 
 
 ```
+sudo apt install swaybg
 sudo apt install swayidle
 sudo apt install swaylock
-sudo apt install swaybg
 ```
 
 Reboot using 
@@ -95,7 +96,7 @@ sudo systemctl set-default graphical.target
 
 ## Boot to Wayland Session Automatically on Log-in
 
-Use the command "ls -a" to list hidden files in the home directory. This reveals the hidden .profile file. Add the following code lines to the bottom of the profile file so that when you log into Debian via the console a Wayland Xfce session is automatically invoked.
+Use the command "ls -a" to list hidden files in the home directory. This reveals the hidden ***.profile*** file. Add the following code lines to the bottom of the profile file so that when you log into Debian via the console a Wayland Xfce session is automatically invoked.
 
 ```
 case "`tty`" in
@@ -134,7 +135,7 @@ Sway is a tiling window manager and Wayland compositor. It is designed to be a d
 
 Various websites report that some Sway utilities can be used with a Xfce Wayland session. For example the Sway background utility called swaybg can be used to display a wallpaper.
 
-Running the following command in a terminal uses swaybg to display the default Xfce wallpaper background.
+Run the following command in a terminal which uses swaybg to display the default Xfce wallpaper background.
 
 ```
 swaybg -i /usr/share/desktop-base/active-theme/wallpaper/contents/images/1920x1080.svg
@@ -170,7 +171,7 @@ and
 
 /etc/xdg/autostart/ (system-wide)
 
-When I added the script I noticed that Xfce added a startup desktop file to the local ***~/.config/autostart*** directory and ran this after it had set up the system.
+Xfce creates and adds a startup desktop file to the local ***~/.config/autostart*** directory as shown below. This runs after Xfce has set up the system and so there is a short delay when displaying the wallpaper.
 
 ```
 [Desktop Entry]
@@ -187,7 +188,10 @@ Terminal=false
 Hidden=false
 ```
 
-I am still experimenting with other Sway utilities and but not having a great deal of success. See the [Manty blog](http://blog.manty.net/2025/05/wayland-en-debian-13-trixie-usando-xfce.html) for more information on using Sway utilities with Xfce4.
+
+I also tried  adding an autostart file to the .config/xfce4/labwc directory with the swaybg command to set the wallpaper. Although the wallpaper is temporarily displayed you need to add a startup script.
+
+I am still experimenting with other Sway utilities and but not having a great deal of success. See [Manty's blog](http://blog.manty.net/2025/05/wayland-en-debian-13-trixie-usando-xfce.html) for more information on using Sway utilities with Xfce4.
 
 It looks like we will need to wait until the Xfce team have their own versions of a Wayland wallpaper utility, Wayland idle management daemon and screen locking utility to avoid workarounds as discussed above.
 
@@ -219,18 +223,18 @@ sudo apt install sqlite3
 
 ## Testing GTK4 Wayland Application
 
-To verify that a GTK4 app can be run using a Xfce labwc Wayland session you can download the Talk Calendar binary and installer  from [here](https://github.com/crispinprojects/talkcalendar).
+To verify that a GTK4 app can be run using a Xfce labwc Wayland session download the Talk Calendar binary and installer from [here](https://github.com/crispinprojects/talkcalendar). This uses Alsa audio and Sqlite3.
 
-The screenshot below shows that the application runs and can be installed. Some of the header button icons are not the same as when using the Debian 13 GNOME or Ubuntu 24.04 distributions but otherwise everything else is functioning. The volume control also works. 
+The screenshot below shows that the Talk Calendar executable runs. Talk Calendar can also be installed using the generic BASH script installer. The volume control works. 
 
 ![](talkcalendar-xfce-wayland.png)
 
 
 ## Compiling GTK4 Wayland Application
 
-Finally verify compiling Talk Calendar. This is an example of a GTK4 Wayland application which runs on other GTK4 Wayland desktops such as GNOME and the Ubuntu Desktop.
+Finally to verify that GTK4 (Wayland) applications can be compiled download the source code for Talk Calendar from the [github page](https://github.com/crispinprojects/talkcalendar). This is an example of a GTK4 application which runs on other GTK4 Wayland desktops such as Debian 13 GNOME and the Ubuntu 24.04 Desktop.
 
-Install the build-essential meta-package which contains a collection of essential software tools and libraries required for building and compiling applications from source code. This includes the GNU Compiler Collection (GCC)  for C and  C++ programming together with GNU Make build automation tool. 
+Install the build-essential meta-package which contains a collection of essential software tools and libraries required for building and compiling applications from source code. This includes the GNU Compiler Collection (GCC) for compiling C and  C++  programs together with GNU Make build automation tool. 
 
 Install the libgtk-4-dev package which contains the header and development files for the GTK4 library and associated libraries such as GLib and Gio. These packages are installed as shown below together with Sqlite3 development library.
 
@@ -241,22 +245,42 @@ sudo apt install libasound2-dev
 sudo apt install libsqlite3-dev
 ```
 
-Download the source code for the GTK4 Talk Calendar projects from [here](https://github.com/crispinprojects/talkcalendar).
 
-Build the project.
+Use the Makefile to build the project by using the command below.
+
 ```
 make
 ```
-Run
+Check that the binary executable runs using the command below.
+
 ```
 ./talkcalendar
 ```
 
-Yes it all works using the labwc Wayland compositor and Xfce4. Absolutely Brilliant!
+Yes it all works using Xfce 4.20 and the labwc Wayland compositor. Absolutely Brilliant!
+
+Assuming that Talk Calendar has been installed using the BASH script then a desktop file as shown below can be added to the directory ./config/autostart to enable Talk Calendar to read out the date and any day events when the computer is switched on.
+
+```
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.4.8
+Type=Application
+Name=Talk Calendar
+Comment=Talking Calendar
+Exec=/usr/bin/talkcalendar/talkcalendar
+OnlyShowIn=XFCE;
+RunHook=0
+StartupNotify=false
+Terminal=false
+Hidden=false
+Icon=
+Path=
+```
 
 ## Not yet implemented
 
-Xfce4 Wayland is under development and so some features of the normal Xfce session are not yet implemented. For example only full screen screenshots can be taken with Xfce 4.20 when using the labwc Wayland compositor. However, I was impressed with what has been achieved so far. Xfce4 with labwc is a capable lightweight Wayland desktop. 
+Xfce4 Wayland is under development and so some features of the normal Xfce session are not yet implemented. For example, only full screen screenshots can be taken when using Xfce 4.20 screenshot tool. However, Xfce4 is a capable lightweight Wayland desktop when coupled with labwc. 
 
 ## Acknowledgements
 
@@ -267,3 +291,5 @@ Xfce4 Wayland is under development and so some features of the normal Xfce sessi
 [labwc](https://github.com/labwc/labwc)
 
 [Wayland en Debian 13 (Trixie) usando xfce](http://blog.manty.net/2025/05/wayland-en-debian-13-trixie-usando-xfce.html) 
+
+[Talk Calendar](https://github.com/crispinprojects/talkcalendar)
